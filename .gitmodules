@@ -1,0 +1,3 @@
+[submodule "SegmentTree"]
+	path = SegmentTree
+	url = git@github.com:ousttrue/SegmentTree.git
