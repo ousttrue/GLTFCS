@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GLTFRW", "GLTFRW\GLTFRW.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GLTFRW.Tests", "GLTFRW.Tests\GLTFRW.Tests.csproj", "{8B51D875-2B40-4853-835E-EC9D7AD2687C}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SegmentTree", "SegmentTree", "{78AD9426-870E-42A6-9C13-5FBCF9577466}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SegmentTree.Tests", "SegmentTree\SegmentTree.Tests\SegmentTree.Tests.csproj", "{A70EB7DE-BDCB-45A5-B2B1-D3251AF1E0E9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -44,5 +48,20 @@ Global
 		{8B51D875-2B40-4853-835E-EC9D7AD2687C}.Release|x64.Build.0 = Release|Any CPU
 		{8B51D875-2B40-4853-835E-EC9D7AD2687C}.Release|x86.ActiveCfg = Release|Any CPU
 		{8B51D875-2B40-4853-835E-EC9D7AD2687C}.Release|x86.Build.0 = Release|Any CPU
+		{A70EB7DE-BDCB-45A5-B2B1-D3251AF1E0E9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A70EB7DE-BDCB-45A5-B2B1-D3251AF1E0E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A70EB7DE-BDCB-45A5-B2B1-D3251AF1E0E9}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{A70EB7DE-BDCB-45A5-B2B1-D3251AF1E0E9}.Debug|x64.Build.0 = Debug|Any CPU
+		{A70EB7DE-BDCB-45A5-B2B1-D3251AF1E0E9}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{A70EB7DE-BDCB-45A5-B2B1-D3251AF1E0E9}.Debug|x86.Build.0 = Debug|Any CPU
+		{A70EB7DE-BDCB-45A5-B2B1-D3251AF1E0E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A70EB7DE-BDCB-45A5-B2B1-D3251AF1E0E9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A70EB7DE-BDCB-45A5-B2B1-D3251AF1E0E9}.Release|x64.ActiveCfg = Release|Any CPU
+		{A70EB7DE-BDCB-45A5-B2B1-D3251AF1E0E9}.Release|x64.Build.0 = Release|Any CPU
+		{A70EB7DE-BDCB-45A5-B2B1-D3251AF1E0E9}.Release|x86.ActiveCfg = Release|Any CPU
+		{A70EB7DE-BDCB-45A5-B2B1-D3251AF1E0E9}.Release|x86.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{A70EB7DE-BDCB-45A5-B2B1-D3251AF1E0E9} = {78AD9426-870E-42A6-9C13-5FBCF9577466}
 	EndGlobalSection
 EndGlobal
