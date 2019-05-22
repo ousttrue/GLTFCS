@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\GLTFRW\GLTFRW.csproj" />
+    <ProjectReference Include="..\GLTFCS\GLTFCS.csproj" />
     <ProjectReference Include="..\SegmentTree\SegmentTree\SegmentTree.csproj" />
   </ItemGroup>
 

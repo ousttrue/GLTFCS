@@ -4,7 +4,7 @@ using SegmentTree;
 using SegmentTree.Json;
 using Xunit;
 
-namespace GLTFRW.Tests
+namespace GLTFCS.Tests
 {
     public class GLTFTest
     {

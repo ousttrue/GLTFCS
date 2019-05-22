@@ -10,9 +10,9 @@
             "request": "launch",
             "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/GLTFRW.Tests/bin/Debug/netcoreapp2.2/GLTFRW.Tests.dll",
+            "program": "${workspaceFolder}/GLTFCS.Tests/bin/Debug/netcoreapp2.2/GLTFCS.Tests.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/GLTFRW.Tests",
+            "cwd": "${workspaceFolder}/GLTFCS.Tests",
             // For more information about the 'console' field, see https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md#console-terminal-window
             "console": "internalConsole",
             "stopAtEntry": false
