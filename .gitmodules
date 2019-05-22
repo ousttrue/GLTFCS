@@ -1,3 +1,6 @@
 [submodule "SegmentTree"]
 	path = SegmentTree
 	url = https://github.com/ousttrue/SegmentTree.git
+[submodule "ComPtrCS"]
+	path = ComPtrCS
+	url = https://github.com/ousttrue/ComPtrCS.git
