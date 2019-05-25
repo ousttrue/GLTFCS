@@ -2,99 +2,55 @@
 using System.Numerics;
 using System.Runtime.InteropServices;
 using ComPtrCS;
+using ComPtrCS.Utilities;
 using ComPtrCS.WindowsKits.build_10_0_17763_0;
 
 namespace GLTFCS.Viewer
 {
     class D3DApp : IDisposable
     {
-        ID3D11Device m_pDevice = new ID3D11Device();
+        D3D11Device m_d3d11 = new D3D11Device();
 
-        ID3D11DeviceContext m_pContext = new ID3D11DeviceContext();
-
-        IDXGISwapChain m_swapChain = new IDXGISwapChain();
+        DXGISwapChainForHWND m_swapchain = new DXGISwapChainForHWND();
 
         bool m_disposed;
 
         public void Dispose()
         {
             m_disposed = true;
-            m_swapChain.Dispose();
-            m_pContext.Dispose();
-            m_pDevice.Dispose();
+            m_swapchain.Dispose();
+            m_d3d11.Dispose();
         }
 
-        void EnsureDevice(HWND hWnd)
+        public void Resize(HWND _, int w, int h)
         {
-            if (m_pDevice)
-            {
-                return;
-            }
-            Span<D3D_FEATURE_LEVEL> levels = stackalloc D3D_FEATURE_LEVEL[]
-            {
-                D3D_FEATURE_LEVEL._11_1,
-                D3D_FEATURE_LEVEL._11_0,
-                D3D_FEATURE_LEVEL._10_1,
-                D3D_FEATURE_LEVEL._10_0,
-                D3D_FEATURE_LEVEL._9_3,
-                D3D_FEATURE_LEVEL._9_2,
-                D3D_FEATURE_LEVEL._9_1
-            };
-            var level = default(D3D_FEATURE_LEVEL);
-
-            var desc = new DXGI_SWAP_CHAIN_DESC
-            {
-                BufferDesc = new DXGI_MODE_DESC
-                {
-                    Width = 0,
-                    Height = 0,
-                    RefreshRate = new DXGI_RATIONAL
-                    {
-                        Numerator = 60,
-                        Denominator = 1,
-                    },
-                    Format = DXGI_FORMAT.R8G8B8A8_UNORM_SRGB,
-                },
-                SampleDesc = new DXGI_SAMPLE_DESC
-                {
-                    Count = 1,
-                    Quality = 0,
-                },
-                BufferUsage = new DXGI_USAGE
-                {
-                    Value = dxgi.DXGI_USAGE_RENDER_TARGET_OUTPUT
-                },
-                BufferCount = 1,
-                Windowed = 1,
-                OutputWindow = hWnd.Value,
-            };
-
-            d3d11.D3D11CreateDeviceAndSwapChain(
-                null,
-                D3D_DRIVER_TYPE.HARDWARE,
-                IntPtr.Zero,
-                (uint)D3D11_CREATE_DEVICE_FLAG.DEBUG,
-                ref MemoryMarshal.GetReference(levels),
-                (uint)levels.Length,
-                d3d11.D3D11_SDK_VERSION,
-                ref desc,
-                ref m_swapChain.PtrForNew,
-                ref m_pDevice.PtrForNew,
-                ref level,
-                ref m_pContext.PtrForNew).ThrowIfFailed();
-
-            Console.Write("CreateDevice");
+            m_swapchain.Resize(w, h);
         }
 
-        public void Resize(HWND hWnd, int w, int h)
+        ID3D11RenderTargetView Begin(HWND hWnd, out float width, out float height)
         {
-            if (m_disposed)
+            using (var texture = m_swapchain.GetBackbuffer(m_d3d11.Device, hWnd.Value))
             {
-                return;
-            }
-            EnsureDevice(hWnd);
+                var desc = new D3D11_TEXTURE2D_DESC();
+                texture.GetDesc(ref desc);
+                width = (float)desc.Width;
+                height = (float)desc.Height;
 
-            m_swapChain.ResizeBuffers(1, (uint)w, (uint)h, DXGI_FORMAT.R8G8B8A8_UNORM, 0);
+                var rtv_desc = new D3D11_RENDER_TARGET_VIEW_DESC
+                {
+                    Format = desc.Format,
+                    ViewDimension = D3D11_RTV_DIMENSION.TEXTURE2D
+                };
+                var rtv = new ID3D11RenderTargetView();
+                m_d3d11.Device.CreateRenderTargetView(texture.Ptr, ref rtv_desc, ref rtv.PtrForNew).ThrowIfFailed();
+                return rtv;
+            }
+        }
+
+        void End()
+        {
+            m_d3d11.Context.Flush();
+            m_swapchain.Present();
         }
 
         public void Draw(HWND hWnd)
@@ -103,29 +59,15 @@ namespace GLTFCS.Viewer
             {
                 return;
             }
-            EnsureDevice(hWnd);
 
-            using (var texture = new ID3D11Texture2D())
+            using (var rtv = Begin(hWnd, out float w, out float h))
             {
-                m_swapChain.GetBuffer(0, ref texture.IID, ref texture.PtrForNew).ThrowIfFailed();
+                // clear
+                var clearColor = new Vector4(0.0f, 0.125f, 0.3f, 1.0f);
+                m_d3d11.Context.ClearRenderTargetView(rtv.Ptr, ref clearColor);
 
-                // _rtv
-                var rtv_desc = new D3D11_RENDER_TARGET_VIEW_DESC
-                {
-                    Format = DXGI_FORMAT.R8G8B8A8_UNORM,
-                    ViewDimension = D3D11_RTV_DIMENSION.TEXTURE2D
-                };
-
-                using (var pRTV = new ID3D11RenderTargetView())
-                {
-                    m_pDevice.CreateRenderTargetView(texture.Ptr, ref rtv_desc, ref pRTV.PtrForNew).ThrowIfFailed();
-                    var clearColor = new Vector4(0.0f, 0.125f, 0.3f, 1.0f);
-                    m_pContext.ClearRenderTargetView(pRTV.Ptr, ref clearColor);
-                }
+                End();
             }
-
-            m_pContext.Flush();
-            m_swapChain.Present(0, 0);
         }
     }
 
